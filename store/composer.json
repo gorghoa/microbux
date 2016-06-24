@@ -1,0 +1,26 @@
+{
+    "name": "gorghoa/microbux",
+    "description": "Redux inspired microservice store",
+    "type": "poc",
+    "require": {
+        "react/react": "^0.4.2",
+        "reactivex/rxphp": "^1.3",
+        "atoum/atoum": "^2.7",
+        "guzzlehttp/guzzle": "~6.0",
+        "react/http": "^0.4.1"
+    },
+    "license": "WTFPL",
+    "authors": [
+        {
+            "name": "Rodrigue Villetard",
+            "email": "rodrigue.villetard@gmail.com"
+        }
+    ],
+    "minimum-stability": "dev",
+    "autoload": {
+        "psr-4": {
+            "Gorghoa\\Microbux\\": "src/",
+            "Gorghoa\\Microbux\\tests\\units\\": "tests/"
+        }
+    }
+}

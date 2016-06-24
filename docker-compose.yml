@@ -1,0 +1,16 @@
+version: "2"
+
+services:
+
+    store:
+        build: ./store
+        environment:
+            REACT_PORT: 8000
+        ports:
+            - "8000:8000"
+        volumes:
+            - ./store:/app
+            - store_vendor:/app/vendor
+
+volumes:
+    store_vendor: ~
