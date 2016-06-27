@@ -1,14 +1,18 @@
 <?php
 
 require_once(__DIR__."/vendor/autoload.php");
+use React\Stream\BufferedSink;
+
 use Gorghoa\Microbux\Store;
 use Gorghoa\Microbux\Action;
 use Gorghoa\Microbux\ProviderFactory;
 use Gorghoa\Microbux\ReducerProvider\{InSituReducerProvider, CombinedReducer, HttpReducer};
-use React\Stream\BufferedSink;
+use Gorghoa\Microbux\Middleware\LoggerMiddleware;
 
 $reducer = new CombinedReducer();
 $store = new Store($reducer);
+
+$store->attachMiddleware(new LoggerMiddleware());
 
 $app = function ($request, $response) use ($store, $reducer) {
 
@@ -31,17 +35,20 @@ $app = function ($request, $response) use ($store, $reducer) {
         break;
 
       case '/dispatch':
-        $action = new Action('INSTRUMENT_PLUGGED', [
-                    "name" => "guitar",
-                    "owner" => "nitneuk"
-                  ]);
+        BufferedSink::createPromise($request)->then(function ($data) use ($store) {
 
-        $action = new Action('ENJOY_YOUR_DRINK', [
-                    "name" => "mascotte",
-                    "type" => "beer"
-                  ]);
-        $store->dispatch($action);
-        $data = 'OK';
+          $data = json_decode($data);
+          $action = new Action($data->type, (array) $data->payload);
+
+          try {
+            $store->dispatch($action);
+            $data = 'OK';
+          } catch (RuntimeException $e) {
+            $data = "NOK {$e->getMessage()}";
+          }
+        });
+        $data = 'tried';
+
         break;
 
       default:

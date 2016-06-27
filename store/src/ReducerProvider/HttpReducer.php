@@ -8,7 +8,7 @@ use GuzzleHttp\Client;
  * A reducer provider, mostly use for debugging purposes.
  * It is run locally, hence without network or complicated stuff.
  */
-class HttpReducer implements IReducerProvider
+class HttpReducer implements ReducerProviderInterface
 {
   protected $options;
 

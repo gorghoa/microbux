@@ -2,30 +2,59 @@
 
 namespace Gorghoa\Microbux;
 
-use Gorghoa\Microbux\ReducerProvider\IReducerProvider;
+use Gorghoa\Microbux\ReducerProviderInterface;
+use RuntimeException;
+use Gorghoa\Microbux\MiddlewareInterface;
+use Rx\Subject\BehaviorSubject;
 
-class Store {
+
+class Store extends BehaviorSubject {
 
     protected $state = [];
+    protected $middlewares =[];
     protected $reducer;
 
-    public function __construct(IReducerProvider $reducer) {
+    public function __construct(ReducerProviderInterface $reducer) {
         $this->replaceReducer($reducer);
+        parent::onNext($this->state);
     }
 
-    /**
-     * @return array the state of the store
-     */
-    public function getState() {
+    public function getState(): array {
         return $this->state;
     }
 
     public function dispatch(Action $action) {
+
+        foreach ($this->middlewares as $middleware) {
+            $middleware->preDispatch($this->state, $action);
+        }
+
         $this->state = $this->reducer->reduce($this->state, $action);
+
+        parent::onNext($this->state);
+
+        foreach ($this->middlewares as $middleware) {
+            $middleware->postDispatch($this->state, $action);
+        }
     }
 
-    public function replaceReducer(IReducerProvider $reducer) {
+    public function replaceReducer(ReducerProviderInterface $reducer) {
         $this->reducer = $reducer;
+    }
+
+
+    /**
+     * Ok ok, not proud of this.
+     *
+     * @deprecated
+     * @throw RuntimeException
+     */
+    public function onNext($value) {
+      throw new RuntimeException("onNext is forbidden. Use dispatch instead.");
+    }
+
+    public function attachMiddleware(MiddlewareInterface  $middleware) {
+        $this->middlewares[] = $middleware;
     }
 
 }

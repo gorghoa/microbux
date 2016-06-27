@@ -4,8 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "e9efa55ed5017a9cd7325b0458d54cde",
-    "content-hash": "6210d46860260040c875acfb6abdf5a4",
+    "hash": "c076f8ce8acd174675a9220892103d17",
+    "content-hash": "d72a39a0c8991bf8ae39036351b57691",
     "packages": [
         {
             "name": "atoum/atoum",
@@ -564,6 +564,110 @@
                 "rx"
             ],
             "time": "2016-06-05 15:26:30"
+        },
+        {
+            "name": "rx/http",
+            "version": "0.2.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/RxPHP/RxHttp.git",
+                "reference": "1399128975eacdd4e4c3da780eec633ae8ef69f6"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/RxPHP/RxHttp/zipball/1399128975eacdd4e4c3da780eec633ae8ef69f6",
+                "reference": "1399128975eacdd4e4c3da780eec633ae8ef69f6",
+                "shasum": ""
+            },
+            "require": {
+                "react/http-client": "^0.4.8",
+                "reactivex/rxphp": "^1.0.0",
+                "voryx/event-loop": "^0.2.0"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Rx\\React\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Matt Bonneau",
+                    "email": "matt@bonneau.net",
+                    "role": "Developer"
+                },
+                {
+                    "name": "David Dan",
+                    "email": "davidwdan@gmail.com",
+                    "role": "Developer"
+                }
+            ],
+            "description": "Http Client for RxPHP",
+            "keywords": [
+                "http",
+                "react",
+                "reactivex",
+                "reactphp",
+                "rx.php",
+                "rxphp"
+            ],
+            "time": "2016-03-11 17:05:39"
+        },
+        {
+            "name": "voryx/event-loop",
+            "version": "0.2.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/voryx/event-loop.git",
+                "reference": "8ef08db3d7646fe60d1791ba9625ce65adf935cd"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/voryx/event-loop/zipball/8ef08db3d7646fe60d1791ba9625ce65adf935cd",
+                "reference": "8ef08db3d7646fe60d1791ba9625ce65adf935cd",
+                "shasum": ""
+            },
+            "require": {
+                "react/event-loop": "~0.4.1"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "EventLoop\\": "src"
+                },
+                "files": [
+                    "src/functions.php"
+                ]
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Matt Bonneau",
+                    "email": "matt@bonneau.net",
+                    "role": "Developer"
+                },
+                {
+                    "name": "David Dan",
+                    "email": "davidwdan@gmail.com",
+                    "role": "Developer"
+                }
+            ],
+            "description": "Global static wrapper for react event-loop",
+            "keywords": [
+                "event-loop",
+                "eventloop",
+                "global",
+                "static",
+                "timer"
+            ],
+            "time": "2015-11-23 22:10:36"
         }
     ],
     "packages-dev": [],

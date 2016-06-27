@@ -12,7 +12,7 @@ final class Action implements JsonSerializable
   public function  __construct($type, $payload = null)
     {
       $this->type = $type;
-      $this->payload = $type;
+      $this->payload = $payload;
     }
 
   public function  __get(string $name) {
