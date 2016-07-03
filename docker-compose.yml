@@ -1,6 +1,14 @@
 version: "2"
 
 services:
+    spa:
+        image: gorghoa/php7
+        command: php -S 0.0.0.0:8000
+        working_dir: /app
+        ports:
+            - "8080:8000"
+        volumes:
+            - ./spa:/app
 
     store:
         build: ./store
@@ -8,6 +16,7 @@ services:
             REACT_PORT: 8000
         ports:
             - "8000:8000"
+            - "8001:8001"
         volumes:
             - ./store:/app
             - store_vendor:/app/vendor

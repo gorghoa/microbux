@@ -8,7 +8,9 @@
         "atoum/atoum": "^2.7",
         "guzzlehttp/guzzle": "~6.0",
         "react/http": "^0.4.1",
-        "rx/http": "^0.2.0"
+        "rx/http": "^0.2.0",
+        "hoa/websocket": "^3.16",
+        "cboden/ratchet": "^0.3.5"
     },
     "license": "WTFPL",
     "authors": [

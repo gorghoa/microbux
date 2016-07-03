@@ -11,12 +11,16 @@ use Rx\Subject\BehaviorSubject;
 class Store extends BehaviorSubject {
 
     protected $state = [];
+    protected $subscribers = [];
     protected $middlewares =[];
     protected $reducer;
 
     public function __construct(ReducerProviderInterface $reducer) {
         $this->replaceReducer($reducer);
         parent::onNext($this->state);
+        $this->subscribe(new \Rx\Observer\CallbackObserver(function($state) {
+            $this->sendStateToSubscribers($state);
+        }));
     }
 
     public function getState(): array {
@@ -36,10 +40,22 @@ class Store extends BehaviorSubject {
         foreach ($this->middlewares as $middleware) {
             $middleware->postDispatch($this->state, $action);
         }
+
     }
 
     public function replaceReducer(ReducerProviderInterface $reducer) {
         $this->reducer = $reducer;
+    }
+
+
+    public function attachSubscriber(StoreSubscriberInterface $subscriber) {
+        $this->subscribers[] = $subscriber;
+    }
+
+    private function sendStateToSubscribers($state) {
+        foreach ($this->subscribers as $subscriber) {
+            $subscriber->send($state);
+        }
     }
 
 
