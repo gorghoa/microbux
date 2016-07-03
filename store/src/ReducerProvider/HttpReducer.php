@@ -1,7 +1,7 @@
 <?php
 namespace Gorghoa\Microbux\ReducerProvider;
 
-use Gorghoa\Microbux\Action;
+use Gorghoa\Microbux\{Action, ReducerProviderInterface};
 use GuzzleHttp\Client;
 
 /**
