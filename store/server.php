@@ -16,7 +16,7 @@ $WS = new WebsocketProxySubscriber();
 $store->attachMiddleware(new LoggerMiddleware());
 $store->attachSubscriber($WS);
 
-$app = function ($request, $response) use ($store, $reducer, $WS) {
+$app = function ($request, $response) use ($store, $reducer) {
 
     $headers = array('Content-Type' => 'application/json');
 
@@ -37,7 +37,7 @@ $app = function ($request, $response) use ($store, $reducer, $WS) {
         break;
 
       case '/dispatch':
-        BufferedSink::createPromise($request)->then(function ($data) use ($store, $WS) {
+        BufferedSink::createPromise($request)->then(function ($data) use ($store) {
 
           $data = json_decode($data);
           $action = new Action($data->type, (array) $data->payload);
@@ -45,7 +45,6 @@ $app = function ($request, $response) use ($store, $reducer, $WS) {
           try {
             $store->dispatch($action);
             $data = 'OK';
-            $WS->sendStateToClients($store->getState());
           } catch (RuntimeException $e) {
             $data = "NOK {$e->getMessage()}";
           }
