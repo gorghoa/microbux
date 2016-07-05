@@ -7,7 +7,7 @@ use Gorghoa\Microbux\Store;
 use Gorghoa\Microbux\WebsocketProxySubscriber;
 use Gorghoa\Microbux\Action;
 use Gorghoa\Microbux\ProviderFactory;
-use Gorghoa\Microbux\ReducerProvider\{InSituReducerProvider, CombinedReducer, HttpReducer};
+use Gorghoa\Microbux\ReduceTransport\{InSituReduceTransport, CombinedReducer, HttpReducer};
 use Gorghoa\Microbux\Middleware\LoggerMiddleware;
 
 $reducer = new CombinedReducer();
@@ -22,16 +22,17 @@ $app = function ($request, $response) use ($store, $reducer) {
 
     switch($request->getPath()) {
 
-      case '/state':
+      case '/getState':
         $data = $store->getState();
         break;
 
       case '/register':
 
-        BufferedSink::createPromise($request)->then(function ($data) use ($reducer) {
+        BufferedSink::createPromise($request)->then(function ($data) use ($reducer, $store) {
           $data = json_decode($data);
           $newReducer = ProviderFactory::create($data->provider, (array) $data->options);
           $reducer->registerReducer($data->name, $newReducer);
+          $store->dispatch(new Action('NEW_REDUCER_IN_TOWN'));
         });
         $data = 'ok';
         break;
@@ -46,6 +47,7 @@ $app = function ($request, $response) use ($store, $reducer) {
             $store->dispatch($action);
             $data = 'OK';
           } catch (RuntimeException $e) {
+            var_dump($e->getMessage());
             $data = "NOK {$e->getMessage()}";
           }
         });
@@ -54,7 +56,12 @@ $app = function ($request, $response) use ($store, $reducer) {
         break;
 
       default:
-        $data = 'welcome';
+        $data = [
+            'GET /getState: get full state',
+            'POST /dispatch body: {type: string, payload: any}: Send an action to the store to dispatch',
+            'POST /register body: {provider: HTTP, options: {base_uri: string}, name: string}: register a new reducer',
+            '@TODO POST /subscribe'
+          ];
         break;
     }
 

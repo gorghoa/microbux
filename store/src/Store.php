@@ -2,7 +2,7 @@
 
 namespace Gorghoa\Microbux;
 
-use Gorghoa\Microbux\ReducerProviderInterface;
+use Gorghoa\Microbux\ReduceTransportInterface;
 use RuntimeException;
 use Gorghoa\Microbux\MiddlewareInterface;
 use Rx\Subject\BehaviorSubject;
@@ -15,7 +15,7 @@ class Store extends BehaviorSubject {
     protected $middlewares =[];
     protected $reducer;
 
-    public function __construct(ReducerProviderInterface $reducer) {
+    public function __construct(ReduceTransportInterface $reducer) {
         $this->replaceReducer($reducer);
         parent::onNext($this->state);
         $this->subscribe(new \Rx\Observer\CallbackObserver(function($state) {
@@ -34,7 +34,6 @@ class Store extends BehaviorSubject {
         }
 
         $this->state = $this->reducer->reduce($this->state, $action);
-
         parent::onNext($this->state);
 
         foreach ($this->middlewares as $middleware) {
@@ -43,7 +42,7 @@ class Store extends BehaviorSubject {
 
     }
 
-    public function replaceReducer(ReducerProviderInterface $reducer) {
+    public function replaceReducer(ReduceTransportInterface $reducer) {
         $this->reducer = $reducer;
     }
 

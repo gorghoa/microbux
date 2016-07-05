@@ -1,10 +1,10 @@
 <?php
 
-namespace Gorghoa\Microbux\ReducerProvider;
-use Gorghoa\Microbux\ReducerProviderInterface;
+namespace Gorghoa\Microbux\ReduceTransport;
+use Gorghoa\Microbux\ReduceTransportInterface;
 use Gorghoa\Microbux\Action;
 
-class DumbReducer implements ReducerProviderInterface
+class DumbReducer implements ReduceTransportInterface
 {
     public function configure($options = null) {
 

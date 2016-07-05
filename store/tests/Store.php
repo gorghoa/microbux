@@ -6,7 +6,7 @@ use atoum;
 
 use Gorghoa\Microbux\Store;
 use Gorghoa\Microbux\Action;
-use Gorghoa\Microbux\ReducerProviderInterface;
+use Gorghoa\Microbux\ReduceTransportInterface;
 use Gorghoa\Microbux\Observer\DumbObserver;
 
 class Store extends atoum
@@ -14,7 +14,7 @@ class Store extends atoum
 
     public function initializeReducer() {
 
-      $reducer = new \mock\Gorghoa\Microbux\ReducerProviderInterface();
+      $reducer = new \mock\Gorghoa\Microbux\ReduceTransportInterface();
       $reducer->getMockController()->reduce = function($state) {
         return ['geronimo'];
       };

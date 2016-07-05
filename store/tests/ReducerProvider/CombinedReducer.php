@@ -1,11 +1,11 @@
 <?php
 
-namespace Gorghoa\Microbux\tests\units\ReducerProvider;
+namespace Gorghoa\Microbux\tests\units\ReduceTransport;
 
 use atoum;
 
 use Gorghoa\Microbux\Action;
-use Gorghoa\Microbux\ReducerProvider\{CombinedReducer, DumbReducer, IReducerProvider};
+use Gorghoa\Microbux\ReduceTransport\{CombinedReducer, DumbReducer, IReduceTransport};
 
 class CombinedReducer extends atoum
 {
@@ -25,7 +25,7 @@ class CombinedReducer extends atoum
     public function testRegisterReducer() {
         $sut = new CombinedReducer();
 
-        $this->given($reducer = new \mock\Gorghoa\Microbux\ReducerProvider\DumbReducer)
+        $this->given($reducer = new \mock\Gorghoa\Microbux\ReduceTransport\DumbReducer)
                 ->and($sut->registerReducer('mock', $reducer))
                 ->if($state = $sut->reduce([], new Action('MOCK')))
                 ->then

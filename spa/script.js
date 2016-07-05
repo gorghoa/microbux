@@ -2,9 +2,44 @@
 angular.module('app', []);
 
 
-angular.module('app').controller('main',['$scope', function($scope) {
+angular.module('app').run(['$rootScope', ($rootScope) => {
 
-  $scope.ron = 'home';
+  var host   = 'ws://dockerhost:8001';
+  var socket = null;
+  var print  = function (message) {
+      $rootScope = message;
+      return;
+  };
+
+  try {
+      socket = new WebSocket(host);
+      socket.onopen = function () {
+          console.info('connection is opened');
+          return;
+      };
+
+      socket.onmessage = function (msg) {
+          $rootScope.$broadcast('state', JSON.parse(msg.data));
+          return;
+      };
+
+      socket.onclose = function () {
+          print('connection is closed');
+          return;
+      };
+  } catch (e) {
+      console.warn(e);
+  }
+
+}]);
+
+
+angular.module('app').controller('main',['$scope', '$rootScope',  function($scope, $rootScope) {
+
+  $scope.$on('state', (e, state) => {
+    $scope.state = state;
+    $scope.$apply();
+  });
 
 }]);
 
@@ -12,19 +47,21 @@ angular.module('app').directive('clock', [function() {
 
   const degToRad = (deg) => (deg - 90) * Math.PI / 180;
 
-  const SCHOOL = degToRad(0);
-  const HOME = degToRad(30);
-  const DENTIST = degToRad(60);
-  const PRISON = degToRad(90);
-  const LOST = degToRad(120);
-  const QUIDDITCH = degToRad(150);
-  const MORTAL_PERIL = degToRad(180);
-  const TAILOR = degToRad(210);
-  const BED = degToRad(240);
-  const HOLIDAYS = degToRad(270);
-  const FOREST = degToRad(300);
-  const WORK = degToRad(330);
-  const GARDEN = degToRad(340);
+  const places = {
+    SCHOOL: degToRad(0),
+    HOME: degToRad(30),
+    DENTIST: degToRad(60),
+    PRISON: degToRad(90),
+    LOST: degToRad(120),
+    QUIDDITCH: degToRad(150),
+    MORTAL_PERIL: degToRad(180),
+    TAILOR: degToRad(210),
+    BED: degToRad(240),
+    HOLIDAYS: degToRad(270),
+    FOREST: degToRad(300),
+    WORK: degToRad(330),
+    GARDEN: degToRad(340),
+  };
 
   const drawNeedle = (ctx, name, angle) => {
     ctx.save();
@@ -36,6 +73,9 @@ angular.module('app').directive('clock', [function() {
 
   return {
     restrict: 'E',
+    scope: {
+      weasleys: '='
+    },
     template: `<canvas></canvas>`,
     link: function($scope, el) {
      const cvs = el.find('canvas')[0];
@@ -44,33 +84,30 @@ angular.module('app').directive('clock', [function() {
      let centerX;
      let centerY;
 
-
-
      const img = new Image();
+     img.src = "./clock-background.jpg";
      img.onload = () => {
+        drawWeasleys($scope.weasleys);
+     };
 
-      console.log(img.width, img.height);
+     $scope.$watch('weasleys', (weasleys) => {
+      console.log('weauie', weasleys);
+      drawWeasleys(weasleys);
+     }, true);
+
+     const drawWeasleys = (weasleys) => {
       cvs.width = img.width;
       cvs.height = img.height;
       centerX = cvs.width / 2;
       centerY = cvs.height / 2;
       ctx.drawImage(img, 0, 0, img.width, img.height);
-
       ctx.save();
         ctx.translate(centerX, centerY);
-        drawNeedle(ctx, 'Molly', QUIDDITCH);
-        drawNeedle(ctx, 'Arthur', HOME);
-        drawNeedle(ctx, 'Ginny', HOLIDAYS);
-        drawNeedle(ctx, 'Ron', DENTIST);
-        drawNeedle(ctx, 'Georges', GARDEN);
-        drawNeedle(ctx, 'Fred', GARDEN);
-        drawNeedle(ctx, 'Percy', TAILOR);
-        drawNeedle(ctx, 'Bill', BED);
-        drawNeedle(ctx, 'Charlie', FOREST);
+        for (const i in weasleys) {
+          drawNeedle(ctx, i, places[weasleys[i]]);
+        }
       ctx.restore();
-
      };
-     img.src = "./clock-background.jpg";
     }
   }
 

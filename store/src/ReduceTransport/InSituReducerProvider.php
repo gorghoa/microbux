@@ -1,14 +1,14 @@
 <?php
-namespace Gorghoa\Microbux\ReducerProvider;
+namespace Gorghoa\Microbux\ReduceTransport;
 
-use Gorghoa\Microbux\ReducerProviderInterface;
+use Gorghoa\Microbux\ReduceTransportInterface;
 use Gorghoa\Microbux\Action;
 
 /**
  * A reducer provider, mostly use for debugging purposes.
  * It is run locally, hence without network or complicated stuff.
  */
-class InSituReducerProvider implements ReducerProviderInterface
+class InSituReduceTransport implements ReduceTransportInterface
 {
 
   public function configure($options = null)
