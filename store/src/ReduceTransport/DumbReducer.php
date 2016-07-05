@@ -10,7 +10,7 @@ class DumbReducer implements ReduceTransportInterface
 
     }
 
-    public function reduce(array $state, Action $action = null) {
+    public function reduce($state, Action $action = null) {
         return $state;
     }
 }

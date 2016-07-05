@@ -33,8 +33,8 @@ class CombinedReducer extends atoum
                 ->call('reduce')
                 ->once()
 
-                ->array($state['mock'])
-                    ->isEqualTo([])
+                ->variable($state['mock'])
+                    ->isEqualTo(null)
                 ;
     }
 
